@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://experimental-design.github.io/bofire/data_models_functionals/">
+        <link rel="canonical" href="https://experimental-design.github.io/bofire/strategies/">
       
       
-        <link rel="prev" href="../strategies/">
+        <link rel="prev" href="../examples/">
       
       
-        <link rel="next" href="../userguide_surrogates/">
+        <link rel="next" href="../data_models_functionals/">
       
       
         
@@ -25,7 +25,7 @@
     
     
       
-        <title>Data Models vs Functional Components - BoFire</title>
+        <title>Strategies - BoFire</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#data-models-vs-functional-components" class="md-skip">
+        <a href="#strategies" class="md-skip">
           Skip to content
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Data Models vs Functional Components
+              Strategies
             
           </span>
         </div>
@@ -408,10 +408,37 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../strategies/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Strategies
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -427,6 +454,59 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#non-predictive-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Non-predictive Strategies
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#predictive-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Predictive Strategies
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#combining-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Combining Strategies
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -435,19 +515,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../data_models_functionals/" class="md-nav__link">
         
   
   
@@ -463,7 +534,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -709,49 +779,112 @@
   
 
 
-<h1 id="data-models-vs-functional-components">Data Models vs. Functional Components</h1>
-<p>Data models in BoFire hold static data of an optimization problem. These are input and output features as well as constraints making up the domain. They further include possible optimization objectives, acquisition functions, and kernels.</p>
-<p>All data models in <code>bofire.data_models</code>, are specified as pydantic models and inherit from <code>bofire.data_models.base.BaseModel</code>. These data models can be (de)serialized via <code>.dict()</code> and <code>.model_dump_json()</code> (provided by pydantic). A json schema of each data model can be obtained using <code>.schema()</code>.</p>
-<p>For surrogates and strategies, all functional parts are located in <code>bofire.surrogates</code> and <code>bofire.strategies</code>. These functionalities include the <code>ask</code> and <code>tell</code> as well as <code>fit</code> and <code>predict</code> methods. All class attributes (used by these method) are also removed from the data models. Each functional entity is initialized using the corresponding data model. As an example, consider the following data model of a <code>RandomStrategy</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">bofire.data_models.domain.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dm_domain</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">bofire.data_models.features.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dm_features</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">bofire.data_models.strategies.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dm_strategies</span>
-
-<span class="n">in1</span> <span class="o">=</span> <span class="n">dm_features</span><span class="o">.</span><span class="n">ContinuousInput</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;in1&quot;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">])</span>
-<span class="n">in2</span> <span class="o">=</span> <span class="n">dm_features</span><span class="o">.</span><span class="n">ContinuousInput</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;in2&quot;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">])</span>
-<span class="n">in3</span> <span class="o">=</span> <span class="n">dm_features</span><span class="o">.</span><span class="n">ContinuousInput</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;in3&quot;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">])</span>
-
-<span class="n">out1</span> <span class="o">=</span> <span class="n">dm_features</span><span class="o">.</span><span class="n">ContinuousOutput</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;out1&quot;</span><span class="p">)</span>
-
-<span class="n">inputs</span> <span class="o">=</span> <span class="n">dm_domain</span><span class="o">.</span><span class="n">Inputs</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="n">in1</span><span class="p">,</span> <span class="n">in2</span><span class="p">,</span> <span class="n">in3</span><span class="p">])</span>
-<span class="n">outputs</span> <span class="o">=</span> <span class="n">dm_domain</span><span class="o">.</span><span class="n">Outputs</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="n">out1</span><span class="p">])</span>
-<span class="n">constraints</span> <span class="o">=</span> <span class="n">dm_domain</span><span class="o">.</span><span class="n">Constraints</span><span class="p">()</span>
-
-<span class="n">domain</span> <span class="o">=</span> <span class="n">dm_domain</span><span class="o">.</span><span class="n">Domain</span><span class="p">(</span>
-    <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
-    <span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">,</span>
-    <span class="n">constraints</span><span class="o">=</span><span class="n">constraints</span><span class="p">,</span>
+<h1 id="strategies">Strategies</h1>
+<p>Strategies are the key ingredient of BoFire that explore the search space defined in the <code>Domain</code> and provide candidates for the next experiment or batch of experiments. Available strategies can be clustered in the following subclasses.</p>
+<h2 id="non-predictive-strategies">Non-predictive Strategies</h2>
+<p>BoFire offers the following strategies for sampling from the search space (no output features need to be provided in the <code>Domain</code>):</p>
+<ul>
+<li>
+<p><code>RandomStrategy</code>: This strategy proposes candidates by (quasi-)random sampling from the search space. It is applicable to almost all combinations of input features and constraints.</p>
+</li>
+<li>
+<p><code>DoEStrategy</code>: This strategy offers model-based DoE approaches for proposing candidates.</p>
+</li>
+<li>
+<p><code>FractionalFactorialStrategy</code>: This strategy should be used to generate (fractional-)factorial designs.</p>
+</li>
+</ul>
+<h2 id="predictive-strategies">Predictive Strategies</h2>
+<p>Predictive strategies are making use of (Bayesian) surrogate models to provide candidates with the intention to achieve certain goals depending on the provided objectives of the output features.</p>
+<p>The following predictive strategies are available:</p>
+<ul>
+<li><code>SoboStrategy</code>: Bayesian optimization strategy that optimizes a single-objective acquisition function. For multi-objective domains, different scalarizations are possible as implemented in the <code>AdditiveSoboStrategy</code>, <code>MultiplicativeSoboStrategy</code>, <code>AdditiveMultiplicativeSoboStrategy</code> and <code>CustomSoboStrategy</code>.</li>
+<li><code>MoboStrategy</code>: Bayesian optimization strategy that optimizes a hypervolume based acquisition function for pareto-based multi-objective optimization.</li>
+<li><code>QparegoStrategy</code>: Parallel ParEGO strategy for multiobjective optimization.</li>
+<li><code>MultifidelityStrategy:</code> Single objective multi-fidelity BO as described <a href="https://www.sciencedirect.com/science/article/pii/S0098135423000637">here</a></li>
+<li><code>EntingStrategy</code>: Strategy based on the <code>Entmoot</code> <a href="https://github.com/cog-imperial/entmoot">package</a> that uses tree-based surrogate models to perform both single-objective and multiobjective optimization.</li>
+</ul>
+<h2 id="combining-strategies">Combining Strategies</h2>
+<p>In BoFire, the <code>StepwiseStrategy</code> operates on a sequence of strategies and determines when to switch between them based on customizable logical operators.</p>
+<p>The <code>StepwiseStrategy</code> is comprised of a sequence of <code>Step</code>s, where each <code>Step</code> consists of the following three attributes:</p>
+<ul>
+<li><code>strategy_data</code>: data model of the strategy which should be executed in this step.</li>
+<li><code>condition</code>: A logical expression that determines when this <code>step</code>'s strategy should be executed. The <code>StepwiseStrategy</code> evaluates each step in order and selects the first strategy whose condition evaluates to <code>True</code>.</li>
+<li><code>transform</code>: An object that can be used to transform experiments and/or candidates before they enter/leave the strategy assigned in the step.</li>
+</ul>
+<p>The following example demonstrates how to combine a <code>RandomStrategy</code> with a <code>SoboStrategy</code> using the <code>StepwiseStrategy</code>. In this setup, the <code>RandomStrategy</code> is applied initially to propose candidates until 10 experiments have been completed. Once this threshold is reached, the strategy automatically switches to the <code>SoboStrategy</code> for subsequent candidate generation.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">bofire.strategies.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">strategies</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bofire.benchmarks.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">Himmelblau</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bofire.data_models.strategies.api</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AlwaysTrueCondition</span><span class="p">,</span>
+    <span class="n">NumberOfExperimentsCondition</span><span class="p">,</span>
+    <span class="n">RandomStrategy</span><span class="p">,</span>
+    <span class="n">SoboStrategy</span><span class="p">,</span>
+    <span class="n">Step</span><span class="p">,</span>
+    <span class="n">StepwiseStrategy</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">data_model</span> <span class="o">=</span> <span class="n">dm_strategies</span><span class="o">.</span><span class="n">RandomStrategy</span><span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="n">domain</span><span class="p">)</span>
+
+<span class="n">domain</span> <span class="o">=</span> <span class="n">Himmelblau</span><span class="p">()</span><span class="o">.</span><span class="n">domain</span>
+
+<span class="n">strategy_data</span> <span class="o">=</span> <span class="n">StepwiseStrategy</span><span class="p">(</span>
+    <span class="n">domain</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span>
+    <span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">Step</span><span class="p">(</span>
+            <span class="n">strategy_data</span><span class="o">=</span><span class="n">RandomStrategy</span><span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="n">domain</span><span class="p">),</span>
+            <span class="n">condition</span><span class="o">=</span><span class="n">NumberOfExperimentsCondition</span><span class="p">(</span><span class="n">n_experiments</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">Step</span><span class="p">(</span>
+            <span class="n">strategy_data</span><span class="o">=</span><span class="n">SoboStrategy</span><span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="n">domain</span><span class="p">),</span> <span class="n">condition</span><span class="o">=</span><span class="n">AlwaysTrueCondition</span><span class="p">()</span>
+        <span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+
+<span class="n">strategy</span> <span class="o">=</span> <span class="n">strategies</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">strategy_data</span><span class="p">)</span>
 </code></pre></div>
-<p>Such a data model can be (de)serialized as follows:</p>
-<p><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypeAdapter</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">bofire.data_models.strategies.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnyStrategy</span>
-
-<span class="n">serialized</span> <span class="o">=</span> <span class="n">data_model</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">()</span>
-
-<span class="n">data_model_</span> <span class="o">=</span> <span class="n">TypeAdapter</span><span class="p">(</span><span class="n">AnyStrategy</span><span class="p">)</span><span class="o">.</span><span class="n">validate_json</span><span class="p">(</span><span class="n">serialized</span><span class="p">)</span>
-
-<span class="k">assert</span> <span class="n">data_model_</span> <span class="o">==</span> <span class="n">data_model</span>
-</code></pre></div>
-The data model of a strategy contains its hyperparameters.
-Using this data model of a strategy, we can create an instance of a (functional) strategy:</p>
+<p>When dealing with output constraints, it is often beneficial to ensure that a certain number of experiments satisfy these constraints before proceeding with the main optimization. If no feasible experiments have been found, the strategy should prioritize generating candidates likely to fulfill the output constraints. This can be accomplished by using the <code>qLogPF</code> (Probability of Feasibility) acquisition function together with the <code>FeasibleExperimentCondition</code>. This approach allows the optimization process to focus first on feasibility, and only switch to the main objective once enough feasible experiments are available.</p>
+<p>In the following example, a <code>RandomStrategy</code> is applied for the initial 10 experiments to broadly explore the search space. Afterward, the <code>SoboStrategy</code> with the <code>qLogPF</code> acquisition function is used to prioritize finding at least one feasible experiment that satisfies the output constraints. Once this feasibility criterion is met, the strategy transitions to the standard <code>SoboStrategy</code> to focus on optimizing the main objective.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">bofire.strategies.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">strategies</span>
-<span class="n">strategy</span> <span class="o">=</span> <span class="n">strategies</span><span class="o">.</span><span class="n">RandomStrategy</span><span class="p">(</span><span class="n">data_model</span><span class="o">=</span><span class="n">data_model</span><span class="p">)</span>
-</code></pre></div>
-<p>As each strategy data model should be mapped to a specific (functional) strategy, we provide such a mapping:</p>
-<div class="highlight"><pre><span></span><code><span class="n">strategy</span> <span class="o">=</span> <span class="n">strategies</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">data_model</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bofire.benchmarks.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">DTLZ2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bofire.data_models.acquisition_functions.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">qLogPF</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bofire.data_models.objectives.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">MaximizeSigmoidObjective</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bofire.data_models.strategies.api</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AlwaysTrueCondition</span><span class="p">,</span>
+    <span class="n">FeasibleExperimentCondition</span><span class="p">,</span>
+    <span class="n">NumberOfExperimentsCondition</span><span class="p">,</span>
+    <span class="n">RandomStrategy</span><span class="p">,</span>
+    <span class="n">SoboStrategy</span><span class="p">,</span>
+    <span class="n">Step</span><span class="p">,</span>
+    <span class="n">StepwiseStrategy</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="c1"># create a domain with one output constraint by assigning a MaximizeSigmoidObjective</span>
+<span class="c1"># to the output with key &quot;f_1&quot;</span>
+<span class="n">domain</span> <span class="o">=</span> <span class="n">DTLZ2</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span><span class="o">.</span><span class="n">domain</span>
+<span class="n">domain</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">get_by_key</span><span class="p">(</span><span class="s2">&quot;f_1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">objective</span> <span class="o">=</span> <span class="n">MaximizeSigmoidObjective</span><span class="p">(</span>
+    <span class="n">tp</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">steepness</span><span class="o">=</span><span class="mi">100</span>
+<span class="p">)</span>
+
+
+<span class="n">strategy_data</span> <span class="o">=</span> <span class="n">StepwiseStrategy</span><span class="p">(</span>
+    <span class="n">domain</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span>
+    <span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">Step</span><span class="p">(</span>
+            <span class="n">strategy_data</span><span class="o">=</span><span class="n">RandomStrategy</span><span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="n">domain</span><span class="p">),</span>
+            <span class="n">condition</span><span class="o">=</span><span class="n">NumberOfExperimentsCondition</span><span class="p">(</span><span class="n">n_experiments</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">Step</span><span class="p">(</span>
+            <span class="n">strategy_data</span><span class="o">=</span><span class="n">SoboStrategy</span><span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">acquisition_function</span><span class="o">=</span><span class="n">qLogPF</span><span class="p">()),</span>
+            <span class="n">condition</span><span class="o">=</span><span class="n">FeasibleExperimentCondition</span><span class="p">(</span><span class="n">n_required_feasible_experiments</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">Step</span><span class="p">(</span>
+            <span class="n">strategy_data</span><span class="o">=</span><span class="n">SoboStrategy</span><span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="n">domain</span><span class="p">),</span> <span class="n">condition</span><span class="o">=</span><span class="n">AlwaysTrueCondition</span><span class="p">()</span>
+        <span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+
+<span class="n">strategy</span> <span class="o">=</span> <span class="n">strategies</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">strategy_data</span><span class="p">)</span>
 </code></pre></div>
 
 

@@ -8,13 +8,9 @@
       
       
       
-        <link rel="canonical" href="https://experimental-design.github.io/bofire/data_models_functionals/">
+        <link rel="canonical" href="https://experimental-design.github.io/bofire/CONTRIBUTING/">
       
       
-        <link rel="prev" href="../strategies/">
-      
-      
-        <link rel="next" href="../userguide_surrogates/">
       
       
         
@@ -25,7 +21,7 @@
     
     
       
-        <title>Data Models vs Functional Components - BoFire</title>
+        <title>Contributing - BoFire</title>
       
     
     
@@ -78,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#data-models-vs-functional-components" class="md-skip">
+        <a href="#contributing" class="md-skip">
           Skip to content
         </a>
       
@@ -118,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Data Models vs Functional Components
+              Contributing
             
           </span>
         </div>
@@ -435,19 +431,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../data_models_functionals/" class="md-nav__link">
         
   
   
@@ -463,7 +450,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -709,50 +695,43 @@
   
 
 
-<h1 id="data-models-vs-functional-components">Data Models vs. Functional Components</h1>
-<p>Data models in BoFire hold static data of an optimization problem. These are input and output features as well as constraints making up the domain. They further include possible optimization objectives, acquisition functions, and kernels.</p>
-<p>All data models in <code>bofire.data_models</code>, are specified as pydantic models and inherit from <code>bofire.data_models.base.BaseModel</code>. These data models can be (de)serialized via <code>.dict()</code> and <code>.model_dump_json()</code> (provided by pydantic). A json schema of each data model can be obtained using <code>.schema()</code>.</p>
-<p>For surrogates and strategies, all functional parts are located in <code>bofire.surrogates</code> and <code>bofire.strategies</code>. These functionalities include the <code>ask</code> and <code>tell</code> as well as <code>fit</code> and <code>predict</code> methods. All class attributes (used by these method) are also removed from the data models. Each functional entity is initialized using the corresponding data model. As an example, consider the following data model of a <code>RandomStrategy</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">bofire.data_models.domain.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dm_domain</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">bofire.data_models.features.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dm_features</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">bofire.data_models.strategies.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dm_strategies</span>
-
-<span class="n">in1</span> <span class="o">=</span> <span class="n">dm_features</span><span class="o">.</span><span class="n">ContinuousInput</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;in1&quot;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">])</span>
-<span class="n">in2</span> <span class="o">=</span> <span class="n">dm_features</span><span class="o">.</span><span class="n">ContinuousInput</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;in2&quot;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">])</span>
-<span class="n">in3</span> <span class="o">=</span> <span class="n">dm_features</span><span class="o">.</span><span class="n">ContinuousInput</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;in3&quot;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">])</span>
-
-<span class="n">out1</span> <span class="o">=</span> <span class="n">dm_features</span><span class="o">.</span><span class="n">ContinuousOutput</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;out1&quot;</span><span class="p">)</span>
-
-<span class="n">inputs</span> <span class="o">=</span> <span class="n">dm_domain</span><span class="o">.</span><span class="n">Inputs</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="n">in1</span><span class="p">,</span> <span class="n">in2</span><span class="p">,</span> <span class="n">in3</span><span class="p">])</span>
-<span class="n">outputs</span> <span class="o">=</span> <span class="n">dm_domain</span><span class="o">.</span><span class="n">Outputs</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="n">out1</span><span class="p">])</span>
-<span class="n">constraints</span> <span class="o">=</span> <span class="n">dm_domain</span><span class="o">.</span><span class="n">Constraints</span><span class="p">()</span>
-
-<span class="n">domain</span> <span class="o">=</span> <span class="n">dm_domain</span><span class="o">.</span><span class="n">Domain</span><span class="p">(</span>
-    <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
-    <span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">,</span>
-    <span class="n">constraints</span><span class="o">=</span><span class="n">constraints</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">data_model</span> <span class="o">=</span> <span class="n">dm_strategies</span><span class="o">.</span><span class="n">RandomStrategy</span><span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="n">domain</span><span class="p">)</span>
+<h1 id="contributing">Contributing</h1>
+<p>Contributions to BoFire are highly welcome!</p>
+<h2 id="pull-requests">Pull Requests</h2>
+<p>Pull requests are highly welcome:</p>
+<ol>
+<li>Create a fork from main.</li>
+<li>Add or adapt unit tests according to your change.</li>
+<li>Add doc-strings and update the documentation. You might consider contributing to the tutorials section.</li>
+<li>Make sure that the GitHub pipelines passes.</li>
+</ol>
+<h2 id="development-environment">Development Environment</h2>
+<p>We recommend an editable installation. After cloning the repository via
+<div class="highlight"><pre><span></span><code>git clone https://github.com/experimental-design/bofire.git
 </code></pre></div>
-<p>Such a data model can be (de)serialized as follows:</p>
-<p><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypeAdapter</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">bofire.data_models.strategies.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnyStrategy</span>
-
-<span class="n">serialized</span> <span class="o">=</span> <span class="n">data_model</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">()</span>
-
-<span class="n">data_model_</span> <span class="o">=</span> <span class="n">TypeAdapter</span><span class="p">(</span><span class="n">AnyStrategy</span><span class="p">)</span><span class="o">.</span><span class="n">validate_json</span><span class="p">(</span><span class="n">serialized</span><span class="p">)</span>
-
-<span class="k">assert</span> <span class="n">data_model_</span> <span class="o">==</span> <span class="n">data_model</span>
+and cd <code>bofire</code>, you can proceed with
+<div class="highlight"><pre><span></span><code>pip install -e &quot;.[all]&quot;
 </code></pre></div>
-The data model of a strategy contains its hyperparameters.
-Using this data model of a strategy, we can create an instance of a (functional) strategy:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">bofire.strategies.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">strategies</span>
-<span class="n">strategy</span> <span class="o">=</span> <span class="n">strategies</span><span class="o">.</span><span class="n">RandomStrategy</span><span class="p">(</span><span class="n">data_model</span><span class="o">=</span><span class="n">data_model</span><span class="p">)</span>
+Afterwards, you can check that the tests are successful via
+<div class="highlight"><pre><span></span><code>pytest tests/
+</code></pre></div></p>
+<h2 id="coding-style">Coding Style</h2>
+<p>We use <a href="https://docs.astral.sh/ruff/">Ruff</a> for linting, sorting and formatting of our code.
+Our doc-strings are in <a href="https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html">Google-style</a>.</p>
+<p>In our CI/CD pipeline we check if contributions are compliant to Ruff.
+To make contributors' lives easier, we have pre-commit hooks for Ruff configured in the versions corresponding to the pipeline. They can be installed via</p>
+<p><div class="highlight"><pre><span></span><code>pip install pre-commit
+pre-commit install
 </code></pre></div>
-<p>As each strategy data model should be mapped to a specific (functional) strategy, we provide such a mapping:</p>
-<div class="highlight"><pre><span></span><code><span class="n">strategy</span> <span class="o">=</span> <span class="n">strategies</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">data_model</span><span class="p">)</span>
-</code></pre></div>
+in you local project root folder, if you want to use <code>pre-commit</code>.</p>
+<h2 id="type-checks">Type checks</h2>
+<p>We make heavy use of <a href="https://docs.pydantic.dev/">Pydantic</a> to enforce type checks during runtime. Further, we use <a href="https://github.com/microsoft/pyright">Pyright</a> for static type checking. We enforce Pyright type checks in our CI/CD pipeline.</p>
+<h2 id="tests">Tests</h2>
+<p>If you add new functionality, make sure that it is tested properly and that it does not break existing code. Our tests run in our CI/CD pipeline. The test coverage is hidden from our Readme because it is not a very robust metric. However, you can find it in the outputs of our test-CI/CD-pipeline. See <a href="https://github.com/experimental-design/bofire/actions/runs/13699899620/job/38310818934#step:5:795.">example</a>.</p>
+<h2 id="documentation">Documentation</h2>
+<p>We use <a href="https://www.mkdocs.org/">MkDocs</a> with <a href="https://squidfunk.github.io/mkdocs-material/">material theme</a> and deploy our documentation to https://experimental-design.github.io/bofire/. Thereby, an API description is extracted from the doc-strings. Additionally, we have tutorials and getting-started-sections.</p>
+<h2 id="license">License</h2>
+<p>By contributing you agree that your contributions will be licensed under the same <a href="./LICENSE">BSD 3-Clause License</a> as BoFire.</p>
 
 
 
