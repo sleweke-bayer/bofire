@@ -79,9 +79,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-b22cc5e3947e191bc3cd7ec0d5a99010.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-59a166e3e9355bb01da760d1eb3f594d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-f4e7e4225fb940aa85f198dbd58e9ab8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-59a166e3e9355bb01da760d1eb3f594d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-5c94bdfc28380462b9b13a0ca7c38cf7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-4b6b7388376293a8f0c8984a8fa81281.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-5c94bdfc28380462b9b13a0ca7c38cf7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -786,7 +786,7 @@ window.Quarto = {
 <p>This tutorial will show how to use the model, how to obtain the data-point specific noise levels, and how to obtain the full model trace.</p>
 <section id="imports" class="level3">
 <h3 class="anchored" data-anchor-id="imports">Imports</h3>
-<div id="7268ef6c" class="cell" data-execution_count="1">
+<div id="7d0593ac" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model imports</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -805,7 +805,7 @@ window.Quarto = {
 </section>
 <section id="setting-up-a-synthetic-example" class="level3">
 <h3 class="anchored" data-anchor-id="setting-up-a-synthetic-example">Setting up a Synthetic example</h3>
-<div id="857c2407" class="cell" data-execution_count="2">
+<div id="a6e3e40f" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>input_features <span class="op">=</span> Inputs(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    features<span class="op">=</span>[ContinuousInput(key<span class="op">=</span><span class="ss">f"x_</span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">"</span>, bounds<span class="op">=</span>(<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>)) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>)],</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -823,11 +823,11 @@ window.Quarto = {
 </section>
 <section id="lets-add-two-clear-outliers" class="level3">
 <h3 class="anchored" data-anchor-id="lets-add-two-clear-outliers">Let’s add two clear outliers</h3>
-<div id="a9bd2cea" class="cell" data-execution_count="3">
+<div id="2b204b3f" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>experiments.loc[<span class="dv">0</span>, <span class="st">"y_1"</span>] <span class="op">=</span> <span class="dv">5</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>experiments.loc[<span class="dv">1</span>, <span class="st">"y_1"</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">5</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="15a47386" class="cell" data-execution_count="4">
+<div id="22448769" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>plt.plot(experiments[<span class="st">"x_1"</span>], experiments[<span class="st">"y_1"</span>], <span class="st">"o"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the last two points in red</span></span>
@@ -851,7 +851,7 @@ window.Quarto = {
 </section>
 <section id="testing-a-singletaskgp" class="level3">
 <h3 class="anchored" data-anchor-id="testing-a-singletaskgp">Testing a SingleTaskGP</h3>
-<div id="108c97bb" class="cell" data-execution_count="5">
+<div id="85995e1d" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>stgp_data_model <span class="op">=</span> SingleTaskGPSurrogate(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    inputs<span class="op">=</span>input_features,</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    outputs<span class="op">=</span>output_features,</span>
@@ -865,7 +865,7 @@ window.Quarto = {
   torch.from_numpy(transformed_X.values).to(**tkwargs),</code></pre>
 </div>
 </div>
-<div id="2af4f539" class="cell" data-execution_count="6">
+<div id="ffef1ecb" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the surrogate</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.plot(experiments[<span class="st">"x_1"</span>], experiments[<span class="st">"y_1"</span>], <span class="st">"o"</span>, label<span class="op">=</span><span class="st">"observations"</span>)</span>
@@ -894,7 +894,7 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Outlier_Detection_and_Robust_GP_files/figure-html/cell-7-output-1.png" width="810" height="449" class="figure-img"></p>
+<p><img src="Outlier_Detection_and_Robust_GP_files/figure-html/cell-7-output-1.png" width="811" height="450" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -902,7 +902,7 @@ window.Quarto = {
 </section>
 <section id="testing-the-robust-gp" class="level3">
 <h3 class="anchored" data-anchor-id="testing-the-robust-gp">Testing the Robust GP</h3>
-<div id="1490e30f" class="cell" data-execution_count="7">
+<div id="3f34fb10" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data_model <span class="op">=</span> RobustSingleTaskGPSurrogate(</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    inputs<span class="op">=</span>input_features,</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    outputs<span class="op">=</span>output_features,</span>
@@ -919,7 +919,7 @@ Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/cs
   noise_covar = self.noise_covar.forward(</code></pre>
 </div>
 </div>
-<div id="206bb615" class="cell" data-execution_count="8">
+<div id="42bb66c1" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the surrogate</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.plot(experiments[<span class="st">"x_1"</span>], experiments[<span class="st">"y_1"</span>], <span class="st">"o"</span>, label<span class="op">=</span><span class="st">"observations"</span>)</span>
@@ -948,7 +948,7 @@ Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/cs
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Outlier_Detection_and_Robust_GP_files/figure-html/cell-9-output-1.png" width="810" height="449" class="figure-img"></p>
+<p><img src="Outlier_Detection_and_Robust_GP_files/figure-html/cell-9-output-1.png" width="811" height="450" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -956,7 +956,7 @@ Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/cs
 </section>
 <section id="returning-data-point-specific-noise-values-rho" class="level3">
 <h3 class="anchored" data-anchor-id="returning-data-point-specific-noise-values-rho">Returning data point specific noise values <span class="math inline">\(\rho\)</span></h3>
-<div id="4b57396f" class="cell" data-execution_count="9">
+<div id="32593a07" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>model.predict_outliers(experiments)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <div>
@@ -974,62 +974,62 @@ Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/cs
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
-<td>0.598181</td>
-<td>0.620702</td>
-<td>3.358451</td>
+<td>-0.635611</td>
+<td>0.253016</td>
+<td>5.366049</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
-<td>-0.624803</td>
-<td>0.233500</td>
-<td>3.305877</td>
+<td>0.747315</td>
+<td>0.316161</td>
+<td>5.584202</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
-<td>-0.363855</td>
-<td>0.108556</td>
+<td>-0.789838</td>
+<td>0.098088</td>
 <td>0.000000</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
-<td>0.304283</td>
-<td>0.102937</td>
+<td>0.190134</td>
+<td>0.106370</td>
 <td>0.000000</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
-<td>-0.078160</td>
-<td>0.104827</td>
+<td>-0.107719</td>
+<td>0.122532</td>
 <td>0.000000</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">5</th>
-<td>0.512684</td>
-<td>0.125956</td>
+<td>-1.029259</td>
+<td>0.114062</td>
 <td>0.000000</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">6</th>
-<td>-0.949192</td>
-<td>0.118764</td>
+<td>-0.822934</td>
+<td>0.097728</td>
 <td>0.000000</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">7</th>
-<td>0.580687</td>
-<td>0.116674</td>
+<td>0.809770</td>
+<td>0.121106</td>
 <td>0.000000</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">8</th>
-<td>-0.494277</td>
-<td>0.107126</td>
+<td>0.061169</td>
+<td>0.104324</td>
 <td>0.000000</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">9</th>
-<td>-0.341870</td>
-<td>0.109253</td>
+<td>-0.825318</td>
+<td>0.097709</td>
 <td>0.000000</td>
 </tr>
 </tbody>
@@ -1041,7 +1041,7 @@ Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/cs
 </section>
 <section id="plotting-the-data-point-specific-noise-values" class="level3">
 <h3 class="anchored" data-anchor-id="plotting-the-data-point-specific-noise-values">Plotting the data point specific noise values</h3>
-<div id="45752e0d" class="cell" data-execution_count="10">
+<div id="8378b0c4" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the outlier scores (rho) from the robust GP model</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>outlier_scores <span class="op">=</span> model.predict_outliers(experiments)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1084,7 +1084,7 @@ Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/cs
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Outlier_Detection_and_Robust_GP_files/figure-html/cell-11-output-1.png" width="823" height="449" class="figure-img"></p>
+<p><img src="Outlier_Detection_and_Robust_GP_files/figure-html/cell-11-output-1.png" width="820" height="450" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1093,14 +1093,14 @@ Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/cs
 <section id="hyperparameter-optimization" class="level3">
 <h3 class="anchored" data-anchor-id="hyperparameter-optimization">Hyperparameter optimization</h3>
 <p>The RobustSingleTaskGPSurrogate also support hyperparameter optimization over different kernels, priors, etc.</p>
-<div id="082393e1" class="cell" data-execution_count="11">
+<div id="dd225134" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># opt_surrogate_data, perf = hyperoptimize(surrogate_data=data_model, training_data=experiments, folds=4)</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># surrogate = surrogates.map(opt_surrogate_data)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="obtaining-the-full-model-trace" class="level3">
 <h3 class="anchored" data-anchor-id="obtaining-the-full-model-trace">Obtaining the full model trace</h3>
-<div id="669205d9" class="cell" data-execution_count="12">
+<div id="75bd3827" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> bmc_plot(bmc_support_sizes: Tensor, bmc_probabilities: Tensor) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    cmap <span class="op">=</span> plt.colormaps[<span class="st">"viridis"</span>]</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    bar_width <span class="op">=</span> <span class="dv">1</span></span>
@@ -1131,7 +1131,7 @@ Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/cs
 <span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"Posterior Marginal Likelihood (%)"</span>)</span>
 <span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>    plt.legend(loc<span class="op">=</span><span class="st">"upper right"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="8a67a4c3" class="cell" data-execution_count="13">
+<div id="3aeb642b" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>data_model <span class="op">=</span> RobustSingleTaskGPSurrogate(</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    inputs<span class="op">=</span>input_features,</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    outputs<span class="op">=</span>output_features,</span>
@@ -1146,7 +1146,7 @@ Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/cs
   noise_covar = self.noise_covar.forward(</code></pre>
 </div>
 </div>
-<div id="2dc0ac42" class="cell" data-execution_count="14">
+<div id="579ef68a" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>figsize <span class="op">=</span> (<span class="dv">6</span>, <span class="dv">4</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(dpi<span class="op">=</span><span class="dv">100</span>, figsize<span class="op">=</span>figsize)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>bmc_plot(model.model.bmc_support_sizes.detach(), model.model.bmc_probabilities.detach())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
